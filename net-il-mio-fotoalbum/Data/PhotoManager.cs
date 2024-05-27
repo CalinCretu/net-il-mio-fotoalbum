@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using net_il_mio_fotoalbum.Models;
 
 namespace net_il_mio_fotoalbum.Data
 {

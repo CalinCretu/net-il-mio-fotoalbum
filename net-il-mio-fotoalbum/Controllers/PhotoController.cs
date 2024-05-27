@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using net_il_mio_fotoalbum.Data;
+using net_il_mio_fotoalbum.Models;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
