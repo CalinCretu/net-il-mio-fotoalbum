@@ -8,31 +8,44 @@ namespace net_il_mio_fotoalbum.Models
 
         public Photo Photo { get; set; }
 
-        public List<SelectListItem>? Categories {  get; set; }
+        public List<SelectListItem>? Categories { get; set; }
 
         public List<string>? SelectedCategories { get; set; }
 
         public PhotoFormModel() { }
 
+        public PhotoFormModel(Photo photo)
+        {
+            Photo = photo;
+            if (Photo.Categories != null)
+            {
+                foreach (var i in Photo.Categories)
+                    SelectedCategories.Add(i.Id.ToString());
+            }
+
+        }
+
 
         public void CreateCategories()
         {
             this.Categories = new List<SelectListItem>();
-            this.SelectedCategories = new List<string>();
-            var categoriesFromDB = PhotoManager.GetAllCategories();
-            foreach (var category in categoriesFromDB)
+            if (this.SelectedCategories == null)
+                this.SelectedCategories = new List<string>();
+            var categoriesFromDb = PhotoManager.GetAllCategories();
+            foreach (var category in categoriesFromDb)
             {
-                bool isSelected = this.Photo.Categories?.Any(i => i.Id == category.Id) == true;
+                bool isSelected = this.SelectedCategories.Contains(category.Id.ToString());
                 this.Categories.Add(new SelectListItem()
                 {
                     Text = category.Name,
                     Value = category.Id.ToString(),
                     Selected = isSelected,
                 });
-                if (isSelected)
-                {
-                    this.SelectedCategories.Add(category.Id.ToString());
-                }
+                //    if (isSelected)
+                //    {
+                //        this.SelectedCategories.Add(category.Id.ToString());
+                //    }
+                //}
             }
         }
     }
