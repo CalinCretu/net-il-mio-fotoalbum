@@ -1,9 +1,15 @@
+using net_il_mio_fotoalbum.Data;
+
 namespace net_il_mio_fotoalbum
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            //if (PhotoManager.CountPhotos() == 0)
+            //{
+            //    PhotoManager.InsertPhoto(new Photo("Tramonto Estivo", "Foto di un tramonto d'estate", "url", true, 1));
+            //}
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -28,7 +34,7 @@ namespace net_il_mio_fotoalbum
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Photo}/{action=Index}/{id?}");
 
             app.Run();
         }

@@ -1,0 +1,17 @@
+﻿@using net_il_mio_fotoalbum.Data
+@model Photo
+@{
+    //Controllo se ImgUrl è un url valido 
+
+}
+
+<h1>La Foto selezionata</h1>
+
+<div class="row">
+    <div class="col">@Model.Title</div>
+    <div class="col">@Model.Description</div>
+    <div class="col"><img src="@Model.ImageUrl" alt="@Model.Title" width="100" /></div>
+    <div class="col">@Model.IsVisible</div>
+    <div class="col">@Model.CategoryId</div>
+    <div class="col"><a href="@Url.Action("Index", "Photo")">Indietro</a></div>
+</div>
