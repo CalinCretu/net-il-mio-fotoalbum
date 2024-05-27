@@ -20,7 +20,10 @@ namespace net_il_mio_fotoalbum.Controllers
         [HttpGet]
         public IActionResult CreatePhoto() // restituisce form creazione foto
         {
-            return View(new Photo());
+            Photo p = new Photo("Tramonto Estivo", "Foto di un tramonto d'estate", "url", true);
+            PhotoFormModel model = new PhotoFormModel();
+            model.CreateCategories();
+            return View(model);
         }
 
         [HttpPost]

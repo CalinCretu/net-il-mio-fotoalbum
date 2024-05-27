@@ -2,7 +2,6 @@
 @model Photo
 @{
     //Controllo se ImgUrl è un url valido 
-
 }
 
 <h1>La Foto selezionata</h1>
@@ -12,6 +11,20 @@
     <div class="col">@Model.Description</div>
     <div class="col"><img src="@Model.ImageUrl" alt="@Model.Title" width="100" /></div>
     <div class="col">@Model.IsVisible</div>
-    <div class="col">@Model.CategoryId</div>
     <div class="col"><a href="@Url.Action("Index", "Photo")">Indietro</a></div>
 </div>
+
+@if (Model.Categories?.Count > 0)
+{
+    <div class="row">
+        <div class="col">
+            <h4>
+                Categorie:
+            </h4>
+        </div>
+    </div>
+    @foreach(var categoria in Model.Categories)
+    {
+        <div class="row"><div class="col"><p class="m-0">@categoria.Name</p></div></div>
+    }
+}

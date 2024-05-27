@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Models;
 
 namespace net_il_mio_fotoalbum.Data
@@ -15,9 +16,16 @@ namespace net_il_mio_fotoalbum.Data
             PhotoContext db = new PhotoContext();
             return db.Photos.ToList();
         }
-        public static Photo GetPhoto(int id)
+        public static List<Category> GetAllCategories()
         {
             PhotoContext db = new PhotoContext();
+            return db.Categories.ToList();
+        }
+        public static Photo GetPhoto(int id, bool includeReferences = true)
+        {
+            using PhotoContext db = new PhotoContext();
+            if (includeReferences)
+                return db.Photos.Where(x => x.Id == id).Include(p => p.Categories).FirstOrDefault();
             return db.Photos.FirstOrDefault(p => p.Id == id);
         }
 
@@ -38,8 +46,6 @@ namespace net_il_mio_fotoalbum.Data
             photoDaModificare.Description = photo.Description;
             photoDaModificare.ImageUrl = photo.ImageUrl;
             photoDaModificare.IsVisible = photo.IsVisible;
-            photoDaModificare.CategoryId = photo.CategoryId;
-
             
             db.SaveChanges();
             return true;
@@ -62,7 +68,7 @@ namespace net_il_mio_fotoalbum.Data
         {
             if (PhotoManager.CountPhotos() == 0)
             {
-                PhotoManager.InsertPhoto(new Photo("Tramonto Estivo", "Foto di un tramonto d'estate", "url", true, 1));
+                PhotoManager.InsertPhoto(new Photo("Tramonto Estivo", "Foto di un tramonto d'estate", "url", true));
             }
         }
     }

@@ -27,11 +27,7 @@
             <input asp-for="IsVisible" class="d-block w-100" />
             <span asp-validation-for="IsVisible" class="text-danger"></span>
         </div>
-        <div class="mb-3">
-            <strong>Categoria:</strong>
-            <input asp-for="CategoryId" class="d-block w-100" />
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
-        </div>
+        
         <div class="col"><a href="@Url.Action("Index", "Photo")">Indietro</a></div>
         <div class="text-end">
             <input type="submit" class="btn btn-small btn-info" value="Modifica" />

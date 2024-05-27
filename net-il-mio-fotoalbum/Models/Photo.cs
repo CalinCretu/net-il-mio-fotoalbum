@@ -18,21 +18,20 @@ namespace net_il_mio_fotoalbum.Models
         [Required]
         public string ImageUrl { get; set; }
         public bool IsVisible { get; set; }
-        public int CategoryId { get; set; }
 
         public List<Category>? Categories { get; set; }
 
 
         public Photo() { }
 
-        public Photo(string title, string description, string imageUrl, bool isVisible, int categoryId)
+        public Photo(string title, string description, string imageUrl, bool isVisible)
 
         {
             Title = title;
             Description = description;
             ImageUrl = imageUrl;
             IsVisible = isVisible;
-            CategoryId = categoryId;
+            
         }
     }
 }
