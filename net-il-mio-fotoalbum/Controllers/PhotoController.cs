@@ -57,19 +57,35 @@ namespace net_il_mio_fotoalbum.Controllers
             var photo = PhotoManager.GetPhoto(id);
             if (photo == null)
                 return NotFound();
-            return View(photo);
+
+            var model = new PhotoFormModel(photo);
+            model.CreateCategories();
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdatePhoto(int id, Photo photoDaModificare)
+        public IActionResult UpdatePhoto(int id, PhotoFormModel photoFormModel, PhotoFormModel photoDaModificare)
         {
-            if (ModelState.IsValid == false)
+            if (!ModelState.IsValid)
             {
-                // ritorno la form con i dati compilati dall'utente
-                return View("UpdatePhoto", photoDaModificare);
+                photoFormModel.CreateCategories();
+                return View(photoFormModel);
             }
-            var modified = PhotoManager.UpdatePhoto(id, photoDaModificare);
+
+            var photo = PhotoManager.GetPhoto(id);
+            if (photo == null)
+                return NotFound();
+
+            photo.Title = photoFormModel.Photo.Title;
+            photo.Description = photoFormModel.Photo.Description;
+            photo.ImageUrl = photoFormModel.Photo.ImageUrl;
+            photo.IsVisible = photoFormModel.Photo.IsVisible;
+            photo.Categories = PhotoManager.GetAllCategories()
+                .Where(c => photoFormModel.SelectedCategories.Contains(c.Id.ToString()))
+                .ToList();
+
+            var modified = PhotoManager.UpdatePhoto(id, photoDaModificare.Photo, photoDaModificare.SelectedCategories);
             if (modified)
             {
                 return RedirectToAction("Index");

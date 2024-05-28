@@ -36,36 +36,51 @@ namespace net_il_mio_fotoalbum.Data
             return db.Categories.FirstOrDefault(t => t.Id == id);
         }
 
-        public static void InsertPhoto(Photo Photo, List<string> SelectedTags = null)
+        public static void InsertPhoto(Photo Photo, List<string> SelectedCategories = null)
         {
             using PhotoContext db = new PhotoContext();
-            if (SelectedTags != null)
+            if (SelectedCategories != null)
             {
                 Photo.Categories = new List<Category>();
-                foreach (var categoryId in SelectedTags)
+                foreach (var categoryId in SelectedCategories)
                 {
                     int id = int.Parse(categoryId);
-                    var tag = db.Categories.FirstOrDefault(t => t.Id == id);
-                    Photo.Categories.Add(tag);
+                    var category = db.Categories.FirstOrDefault(t => t.Id == id);
+                    Photo.Categories.Add(category);
                 }
             }
             db.Photos.Add(Photo);
             db.SaveChanges();
         }
 
-        public static bool UpdatePhoto(int id, Photo photo)
+        public static bool UpdatePhoto(int id, Photo photo, List<string> selectedCategories)
         {
             using PhotoContext db = new PhotoContext();
-            var photoDaModificare = db.Photos.FirstOrDefault(p => p.Id == id);
+            var photoDaModificare = db.Photos.Include(p => p.Categories).FirstOrDefault(p => p.Id == id);
             if (photoDaModificare == null)
                 return false;
+
             photoDaModificare.Title = photo.Title;
             photoDaModificare.Description = photo.Description;
             photoDaModificare.ImageUrl = photo.ImageUrl;
             photoDaModificare.IsVisible = photo.IsVisible;
 
-            db.SaveChanges();
-            return true;
+            // Aggiorna le categorie
+            photoDaModificare.Categories.Clear();
+            var categories = db.Categories.Where(c => selectedCategories.Contains(c.Id.ToString())).ToList();
+            photoDaModificare.Categories.AddRange(categories);
+
+            try
+            {
+                db.SaveChanges();
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log dell'eccezione interna per ottenere maggiori dettagli
+                Console.WriteLine(ex.InnerException?.Message);
+                return false;
+            }
         }
 
         public static bool DeletePhoto(int id)
