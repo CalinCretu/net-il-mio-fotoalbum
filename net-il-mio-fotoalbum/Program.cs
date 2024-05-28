@@ -1,4 +1,8 @@
+
 using net_il_mio_fotoalbum.Data;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace net_il_mio_fotoalbum
 {
@@ -6,15 +10,18 @@ namespace net_il_mio_fotoalbum
     {
         public static void Main(string[] args)
         {
-            //if (PhotoManager.CountPhotos() == 0)
-            //{
-            //    PhotoManager.InsertPhoto(new Photo("Tramonto Estivo", "Foto di un tramonto d'estate", "url", true, 1));
-            //}
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddDbContext<PhotoContext>();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<PhotoContext>();
+
+       
+            
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,12 +37,13 @@ namespace net_il_mio_fotoalbum
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Photo}/{action=Index}/{id?}");
-
+            app.MapRazorPages();
             app.Run();
         }
     }
