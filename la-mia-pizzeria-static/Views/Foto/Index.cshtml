@@ -1,0 +1,77 @@
+﻿@using la_mia_pizzeria_static.Data
+
+@model List<Fotos>
+@{
+    using la_mia_pizzeria_static.Data.FotosContext db = new FotosContext();
+}
+<link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
+
+<div class="main text-center">
+    <div class="hero">
+        <h1>
+            Byte Me Pizzeria
+        </h1>
+        <h2>
+            Where Every Slice Tells a little Story
+        </h2>
+    </div>
+    <div class="menu-title">
+        <h2>
+            Special Ones
+        </h2>
+    </div>
+    <p>
+        <a asp-controller="Category" asp-action="Index">View Categories</a>
+    </p>
+    <input type="text" id="Filter" placeholder="Filtra per titolo" />
+
+    <div class="container">
+        @foreach (var foto in Model)
+        {
+            <div class="pizza-card MyPost">
+                <div class="filter-text d-none">@foto.Name</div>
+                <div class="pizza-image">
+                    @if (!string.IsNullOrEmpty(foto.Image))
+                    {
+                        <img src="@Url.Content(foto.Image)" class="img-fluid" alt="@foto.Name">
+                    }
+                    else
+                    {
+                        <img src="~/img/NoImage.jpg" class="img-fluid" alt="Default Image">
+                    }
+                </div>
+                <div class="pizza-details">
+                    <h2>@foto.Name</h2>
+                    <p>@foto.Description</p>
+
+                    <a href="@Url.Action("VediFoto", "Foto", new{id = foto.Id})"><button class="details-button">Details</button></a>
+                    <a href="@Url.Action("UpdateFoto", "Foto", new { id = foto.Id })"><button class="details-button">Edit</button></a>
+                    <a>
+                        <form asp-controller="Foto" asp-action="Delete" asp-route-id="@foto.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="delete-button">
+                                DELETE
+                            </button>
+                        </form>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.getElementById('Filter').addEventListener('keyup', function () {
+        var filter = this.value.toLowerCase();
+        var posts = document.querySelectorAll('.MyPost');
+
+        posts.forEach(function (post) {
+            var title = post.querySelector('.filter-text').innerText.toLowerCase();
+            if (title.includes(filter)) {
+                post.classList.remove('d-none');
+            } else {
+                post.classList.add('d-none');
+            }
+        });
+    });
+</script>

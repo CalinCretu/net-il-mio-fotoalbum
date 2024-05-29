@@ -1,0 +1,47 @@
+﻿@model FotosFormModel
+
+<link rel="stylesheet" href="~/css/Create.css" asp-append-version="true" /> 
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="main">
+    <div class="container d-flex justify-content-center align-items-start min-vh-100 mt-5">
+        <form asp-controller="Foto" asp-acion="UpdateFoto" asp-route-id="@Model.Fotos.Id" method="post" class="form-pizza bg-dark text-white p-4 rounded">
+            @Html.AntiForgeryToken()
+            <div class="text-center">
+                <h2>Edit Pizza</h2>
+            </div>
+            <div class="mb-3">
+                <strong>Nome:</strong>
+                <input asp-for="Fotos.Name" class="d-block w-100" />
+                <span asp-validation-for="Fotos.Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <strong>Descrizione:</strong>
+                <input asp-for="Fotos.Description" class="d-block w-100" />
+                <span asp-validation-for="Fotos.Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <strong>Tags:</strong>
+                @for (int i = 0; i < Model.Categories.Count; i++)
+                {
+                    <div>
+                        <input type="checkbox" name="SelectedCategories" value="@Model.Categories[i].Value"
+                        @(Model.SelectedCategories.Contains(Model.Categories[i].Value) ? "checked" : "") />
+                        @Model.Categories[i].Text
+                    </div>
+                }
+            </div>
+            <div class="text-end">
+                <input type="submit" class="show-button" value="Save" />
+            </div>
+        </form>
+    </div>
+    </div>
+}
+else
+{
+    <div class="text-center text-white my-5 py-5">
+        <h1>Only Admins are authorized</h1>
+    </div>
+}
