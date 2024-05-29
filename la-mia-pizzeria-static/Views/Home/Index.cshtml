@@ -11,22 +11,22 @@
     <div class="row">
         <div class="col">
             <div class="d-flex justify-content-center align-items-center">
-                <h1>Lista Pizze</h1>
-                <input class="js_search" placeholder="Cerca per titolo" />
+                <h1>Foto Pubbliche</h1>
+                <input class="js_search" placeholder="Cerca per Nome" />
             </div>
         </div>
     </div>
-    <div class="row js_no_pizza d-none">
+    <div class="row js_no_foto d-none">
         <div class="col">
-            <h3>Non ci sono pizze</h3>
+            <h3>Non ci sono Foto</h3>
         </div>
     </div>
-    <div class="row js_pizza_table d-none">
+    <div class="row js_foto_table d-none">
         <!-- Qui inseriamo le pizze -->
     </div>
     <div class="row">
         <div class="col">
-            <a href="@Url.Action("Create", "Home")" class="btn btn-primary">Crea Pizza</a>
+            <a href="@Url.Action("Create", "Home")" class="btn btn-primary">Crea Foto</a>
         </div>
     </div>
 </div>
@@ -35,37 +35,37 @@
 
 <script>
     function loadList(nameFilter) {
-        axios.get(`/api/PizzaWebApi/GetPizzaByName/${nameFilter}`, {
-        }).then((res) => {
-            console.log(res);
-            if (res.data.length == 0) {
-                document.querySelector('.js_no_pizza').classList.remove('d-none');
-                document.querySelector('.js_pizza_table').classList.add('d-none');
-            } else {
-                document.querySelector('.js_no_pizza').classList.add('d-none');
-                var pizzaTable = document.querySelector('.js_pizza_table');
-                pizzaTable.classList.remove('d-none');
+        axios.get(`/api/FotoWebApi/GetFotoByName/${nameFilter}`)
+            .then((res) => {
+                console.log(res);
+                if (res.data.length == 0) {
+                    document.querySelector('.js_no_foto').classList.remove('d-none');
+                    document.querySelector('.js_foto_table').classList.add('d-none');
+                } else {
+                    document.querySelector('.js_no_foto').classList.add('d-none');
+                    var fotoTable = document.querySelector('.js_foto_table');
+                    fotoTable.classList.remove('d-none');
 
-                pizzaTable.innerHTML = '';
-                res.data.forEach((pizza) => {
-                    pizzaTable.innerHTML += `
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">${pizza.name}</h5>
-                                    <p class="card-text">${pizza.description}</p>
-                                    <p class="card-text">Prezzo: ${pizza.price}€</p>
-                                    <button class="btn btn-danger" onclick="deleteById(${pizza.id})">Elimina</button>
-                                </div>
-                            </div>
-                        </div>`;
-                });
-            }
-        });
+                    fotoTable.innerHTML = '';
+                    res.data.forEach((foto) => {
+                        fotoTable.innerHTML += `
+                                <div class="col">
+                                    <div class="card">
+                                        <img src="${foto.image || '/img/NoImage.jpg'}" class="card-img-top" alt="${foto.name}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${foto.name}</h5>
+                                            <p class="card-text">${foto.description}</p>
+                                            <button class="btn btn-danger" onclick="deleteById(${foto.id})">Elimina</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    });
+                }
+            });
     }
 
     function deleteById(id) {
-        axios.delete("/api/PizzaWebApi/DeletePizza/" + id)
+        axios.delete("/api/FotoWebApi/DeleteFoto/" + id)
             .then((res) => {
                 loadList('');
             });

@@ -13,7 +13,7 @@
                     <p>@Model.Description</p>
                     @if (!string.IsNullOrEmpty(Model.Image))
                     {
-                        <img src="@Url.Content(Model.Image)" class="img-fluid show-pizza-image" alt="@Model.Name">
+                        <img src="@Url.Content("~"+Model.Image)" class="img-fluid show-pizza-image" alt="@Model.Name">
                     }
                     else
                     {

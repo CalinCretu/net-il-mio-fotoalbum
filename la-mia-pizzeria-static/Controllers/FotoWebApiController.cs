@@ -15,6 +15,7 @@ namespace la_mia_pizzeria_static.Controllers
             var fotos = FotoManager.GetAllFotos();
             return Ok(fotos);
         }
+        
 
         [HttpGet]
         public IActionResult GetFotoById(int id)

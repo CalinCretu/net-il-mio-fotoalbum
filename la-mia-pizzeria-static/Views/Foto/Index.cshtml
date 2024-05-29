@@ -33,7 +33,7 @@
                 <div class="pizza-image">
                     @if (!string.IsNullOrEmpty(foto.Image))
                     {
-                        <img src="@Url.Content(foto.Image)" class="img-fluid" alt="@foto.Name">
+                        <img src="@Url.Content("~"+foto.Image)" class="img-fluid" alt="@foto.Name">
                     }
                     else
                     {
