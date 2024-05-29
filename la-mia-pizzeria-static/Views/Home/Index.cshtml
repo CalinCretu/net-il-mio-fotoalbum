@@ -24,6 +24,25 @@
     <div class="row js_foto_table d-none">
         <!-- Qui inseriamo le pizze -->
     </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h2>Contattaci</h2>
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Messaggio</label>
+                        <textarea class="form-control" id="message" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Invia</button>
+                </form>
+                <div id="formFeedback" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -76,5 +95,19 @@
     }
 
     document.querySelector('.js_search').addEventListener('keyup', search);
+
+    document.getElementById('contactForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        axios.post('/api/ContactMessageWebApi/SendMessage', { email, message })
+            .then((response) => {
+                document.getElementById('formFeedback').innerText = 'Messaggio inviato con successo!';
+            })
+            .catch((error) => {
+                document.getElementById('formFeedback').innerText = 'Errore nell\'invio del messaggio.';
+            });
+    });
 </script>
 
