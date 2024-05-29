@@ -43,16 +43,19 @@
 
                     fotoTable.innerHTML = '';
                     res.data.forEach((foto) => {
+                        let categories = foto.categories.join(', ');
+
                         fotoTable.innerHTML += `
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="${foto.image || '/img/NoImage.jpg'}" class="card-img-top" alt="${foto.name}">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${foto.name}</h5>
-                                            <p class="card-text">${foto.description}</p>
+                                    <div class="col">
+                                        <div class="card">
+                                            <img src="${foto.image || '/img/NoImage.jpg'}" class="card-img-top" alt="${foto.name}">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${foto.name}</h5>
+                                                <p class="card-text">${foto.description}</p>
+                                                <p class="card-text">${categories}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>`;
+                                    </div>`;
                     });
                 }
             });
@@ -74,3 +77,4 @@
 
     document.querySelector('.js_search').addEventListener('keyup', search);
 </script>
+

@@ -2,6 +2,7 @@
 using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace la_mia_pizzeria_static.Controllers
@@ -40,49 +41,20 @@ namespace la_mia_pizzeria_static.Controllers
         [HttpGet("{name?}")]
         public IActionResult GetFotoByName(string? name)
         {
-            var fotos = _context.Fotos
-                .Where(f => f.Visible)  // Aggiungi filtro per visibilità
-                .Where(f => string.IsNullOrEmpty(name) || f.Name.Contains(name))
-                .ToList();
-            return Ok(fotos);
-        }
+            var fotos = string.IsNullOrEmpty(name)
+                ? _context.Fotos.Include(f => f.Categories).Where(f => f.Visible).ToList()
+                : _context.Fotos.Include(f => f.Categories).Where(f => f.Visible && f.Name.Contains(name)).ToList();
 
-        [HttpPost]
-        public IActionResult CreateFoto([FromBody] Fotos fotos)
-        {
-            _context.Fotos.Add(fotos);
-            _context.SaveChanges();
-            return Ok();
-        }
+            var fotosWithCategories = fotos.Select(f => new
+            {
+                f.Id,
+                f.Name,
+                f.Description,
+                f.Image,
+                Categories = f.Categories.Select(c => c.Name).ToList()
+            });
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateFoto(int id, [FromBody] Fotos fotos)
-        {
-            var oldFoto = _context.Fotos.Find(id);
-            if (oldFoto == null)
-                return NotFound();
-
-            oldFoto.Name = fotos.Name;
-            oldFoto.Description = fotos.Description;
-            oldFoto.Image = fotos.Image;
-            oldFoto.Visible = fotos.Visible;
-
-            _context.SaveChanges();
-
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteFoto(int id)
-        {
-            var foto = _context.Fotos.Find(id);
-            if (foto == null)
-                return NotFound();
-
-            _context.Fotos.Remove(foto);
-            _context.SaveChanges();
-
-            return Ok();
+            return Ok(fotosWithCategories);
         }
     }
 }
