@@ -32,6 +32,11 @@
                     </div>
                 }
             </div>
+                <div class="mb-3">
+                    <strong>Visibilità:</strong>
+                    <input asp-for="Fotos.Visible" class="d-block w-100" />
+                    <span asp-validation-for="Fotos.Visible" class="text-danger"></span>
+                </div>
             <div class="text-end">
                 <input type="submit" class="show-button" value="Save" />
             </div>

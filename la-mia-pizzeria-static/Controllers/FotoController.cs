@@ -92,7 +92,7 @@ namespace la_mia_pizzeria_static.Controllers
                 return View("UpdateFoto", data);
             }
 
-            if (FotoManager.UpdateFoto(id, data.Fotos.Name, data.Fotos.Description, data.SelectedCategories))
+            if (FotoManager.UpdateFoto(id, data.Fotos.Name, data.Fotos.Description, data.Fotos.Visible ,data.SelectedCategories))
                 return RedirectToAction("Index");
             else
                 return NotFound();

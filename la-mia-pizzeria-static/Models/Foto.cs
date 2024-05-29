@@ -27,21 +27,12 @@ namespace la_mia_pizzeria_static.Models
         // New property
         public bool Visible { get; set; } = true;
 
-        public Fotos(string name, string description, string image)
+        public Fotos(string name, string description, string image, bool visible)
         {
             Name = name;
             Description = description;
             Image = image;
-            Visible = true; // Default value for new objects
-        }
-
-        public Fotos(int id, string name, string description, string image)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            Image = image;
-            Visible = true; // Default value for new objects
+            Visible = visible; // Default value for new objects
         }
 
         public Fotos() { }

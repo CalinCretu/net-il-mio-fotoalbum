@@ -72,7 +72,7 @@ namespace la_mia_pizzeria_static.Data
             db.SaveChanges();
         }
 
-        public static bool UpdateFoto(int id, string name, string description, List<string> categories)
+        public static bool UpdateFoto(int id, string name, string description, bool visible, List<string> categories)
         {
             using FotosContext db = new FotosContext();
             var foto = db.Fotos.Where(x => x.Id == id).Include(x => x.Categories).FirstOrDefault();
@@ -82,6 +82,7 @@ namespace la_mia_pizzeria_static.Data
 
             foto.Name = name;
             foto.Description = description;
+            foto.Visible = visible;
 
             foto.Categories.Clear();
             if (categories != null)
@@ -116,10 +117,10 @@ namespace la_mia_pizzeria_static.Data
         {
             if (FotoManager.CountDbFotos() == 0)
             {
-                FotoManager.InsertFoto(new Fotos("Campo Fiorito", "Bellissimo campo di fiori", "~/img/CampoFiorito.jpg"));
-                FotoManager.InsertFoto(new Fotos("Lago di Montagna", "Freddissimo lago di montagna", "~/img/LagoGhiacciato.jpeg"));
-                FotoManager.InsertFoto(new Fotos("Lavanda <3", "Calmissimo tramonto", "~/img/Lavanda.jpg"));
-                FotoManager.InsertFoto(new Fotos("Montagnone", "Una Montagna Immensa", "~/img/Montagne.jpg"));
+                FotoManager.InsertFoto(new Fotos("Campo Fiorito", "Bellissimo campo di fiori", "~/img/CampoFiorito.jpg", true));
+                FotoManager.InsertFoto(new Fotos("Lago di Montagna", "Freddissimo lago di montagna", "~/img/LagoGhiacciato.jpeg", true));
+                FotoManager.InsertFoto(new Fotos("Lavanda <3", "Calmissimo tramonto", "~/img/Lavanda.jpg", true));
+                FotoManager.InsertFoto(new Fotos("Montagnone", "Una Montagna Immensa", "~/img/Montagne.jpg", true));
             }
         }
     }
