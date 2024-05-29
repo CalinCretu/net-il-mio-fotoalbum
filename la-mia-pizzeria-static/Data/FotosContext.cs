@@ -10,6 +10,8 @@ namespace la_mia_pizzeria_static.Data
         public DbSet<Fotos> Fotos { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<ContactMessage> ContactMessages { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
