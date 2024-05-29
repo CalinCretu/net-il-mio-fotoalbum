@@ -46,7 +46,7 @@ namespace la_mia_pizzeria_static
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Foto}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
 

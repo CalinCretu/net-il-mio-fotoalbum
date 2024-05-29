@@ -24,11 +24,6 @@
     <div class="row js_foto_table d-none">
         <!-- Qui inseriamo le pizze -->
     </div>
-    <div class="row">
-        <div class="col">
-            <a href="@Url.Action("Create", "Home")" class="btn btn-primary">Crea Foto</a>
-        </div>
-    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -55,7 +50,6 @@
                                         <div class="card-body">
                                             <h5 class="card-title">${foto.name}</h5>
                                             <p class="card-text">${foto.description}</p>
-                                            <button class="btn btn-danger" onclick="deleteById(${foto.id})">Elimina</button>
                                         </div>
                                     </div>
                                 </div>`;

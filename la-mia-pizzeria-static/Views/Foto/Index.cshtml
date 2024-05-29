@@ -6,6 +6,8 @@
 }
 <link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
 
+@if (User.IsInRole("Admin"))
+{
 <div class="main text-center">
     <div class="hero">
         <h1>
@@ -17,7 +19,7 @@
     </div>
     <div class="menu-title">
         <h2>
-            Special Ones
+            Le tue Foto
         </h2>
     </div>
     <p>
@@ -59,7 +61,14 @@
         }
     </div>
 </div>
+}
+else
+{
+    <div class="text-center text-white my-5 py-5">
+        <h1>Only Admins are authorized</h1>
+    </div>
 
+}
 <script>
     document.getElementById('Filter').addEventListener('keyup', function () {
         var filter = this.value.toLowerCase();

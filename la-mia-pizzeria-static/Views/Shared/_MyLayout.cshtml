@@ -17,12 +17,22 @@
             <div class="logo">
                 <img src="~/img/PizzaLogoRound.png">
             </div>
-            <ul class="menus">
-                <li><a href="@Url.Action("Index", "Home")">User</a></li>
-                <li><a aria-current="page" href="@Url.Action("Index", "Foto")">Admin</a></li>
-                <li><a href="@Url.Action("Create", "Foto")">Add new Foto</a></li>
-                <div><partial name="_LoginPartial" /></div>
-            </ul>
+            @if (User.IsInRole("Admin"))
+            {
+                <ul class="menus">
+                    <li><a href="@Url.Action("Index", "Home")">Homepage</a></li>
+                    <li><a aria-current="page" href="@Url.Action("Index", "Foto")">Admin</a></li>
+                    <li><a href="@Url.Action("Create", "Foto")">Add new Foto</a></li>
+                    <div><partial name="_LoginPartial" /></div>
+                </ul>
+            }
+            else
+            {
+                <ul class="menus">
+                    <li><a href="@Url.Action("Index", "Home")">Homepage</a></li>
+                    <div><partial name="_LoginPartial" /></div>
+                </ul>
+            }
             <div class="icon">
                 <img src="~/img/RubberDuck.png">
             </div>

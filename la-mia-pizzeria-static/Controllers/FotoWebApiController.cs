@@ -2,6 +2,7 @@
 using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace la_mia_pizzeria_static.Controllers
 {
@@ -9,18 +10,28 @@ namespace la_mia_pizzeria_static.Controllers
     [ApiController]
     public class FotoWebApiController : ControllerBase
     {
+        private readonly FotosContext _context;
+
+        public FotoWebApiController(FotosContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IActionResult GetAllFotos()
         {
-            var fotos = FotoManager.GetAllFotos();
+            var fotos = _context.Fotos
+                .Where(f => f.Visible)  // Aggiungi filtro per visibilità
+                .ToList();
             return Ok(fotos);
         }
-        
 
         [HttpGet]
         public IActionResult GetFotoById(int id)
         {
-            var foto = FotoManager.VediFoto(id);
+            var foto = _context.Fotos
+                .Where(f => f.Visible)  // Aggiungi filtro per visibilità
+                .FirstOrDefault(f => f.Id == id);
             if (foto == null)
                 return NotFound();
             return Ok(foto);
@@ -29,36 +40,34 @@ namespace la_mia_pizzeria_static.Controllers
         [HttpGet("{name?}")]
         public IActionResult GetFotoByName(string? name)
         {
-            if (name == null)
-            {
-                return Ok(FotoManager.GetAllFotos());
-            }
-            //var foto = FotoManager.GetFotoByName(name);
-            return Ok(FotoManager.GetFotoByName(name));
+            var fotos = _context.Fotos
+                .Where(f => f.Visible)  // Aggiungi filtro per visibilità
+                .Where(f => string.IsNullOrEmpty(name) || f.Name.Contains(name))
+                .ToList();
+            return Ok(fotos);
         }
 
         [HttpPost]
         public IActionResult CreateFoto([FromBody] Fotos fotos)
         {
-            FotoManager.InsertFoto(fotos, null);
+            _context.Fotos.Add(fotos);
+            _context.SaveChanges();
             return Ok();
         }
+
         [HttpPut("{id}")]
         public IActionResult UpdateFoto(int id, [FromBody] Fotos fotos)
         {
-            var oldFoto = FotoManager.VediFoto(id);
+            var oldFoto = _context.Fotos.Find(id);
             if (oldFoto == null)
                 return NotFound();
 
-            var success = FotoManager.UpdateFoto(
-                id,
-                fotos.Name,
-                fotos.Description,
-                null // Passiamo null per le categorie per ora
-            );
+            oldFoto.Name = fotos.Name;
+            oldFoto.Description = fotos.Description;
+            oldFoto.Image = fotos.Image;
+            oldFoto.Visible = fotos.Visible;
 
-            if (!success)
-                return StatusCode(StatusCodes.Status500InternalServerError, "Errore durante l'aggiornamento della foto.");
+            _context.SaveChanges();
 
             return Ok();
         }
@@ -66,9 +75,13 @@ namespace la_mia_pizzeria_static.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteFoto(int id)
         {
-            bool success = FotoManager.DeleteFoto(id);
-            if (!success)
+            var foto = _context.Fotos.Find(id);
+            if (foto == null)
                 return NotFound();
+
+            _context.Fotos.Remove(foto);
+            _context.SaveChanges();
+
             return Ok();
         }
     }
